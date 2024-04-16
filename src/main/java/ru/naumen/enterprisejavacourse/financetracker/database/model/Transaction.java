@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "app_transaction")
@@ -35,13 +35,16 @@ public class Transaction {
     @Getter(AccessLevel.NONE)
     private final String currency = "RUS";
 
-    /*
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-    @OneToOne
-    private BankAccount bankAccount;
-*/
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        Transaction that = (Transaction) object;
+        return Objects.equals(id, that.id);
+    }
 
-
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

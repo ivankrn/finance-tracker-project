@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -23,16 +24,20 @@ public class ExpenseCategory {
     @OneToMany(mappedBy = "category")
     private Set<Transaction> transaction = new HashSet<>();
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     @Setter(AccessLevel.NONE)
     private String categoryName;
 
-    /*
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-    @OneToOne
-    private BankAccount bankAccount;
-*/
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        ExpenseCategory that = (ExpenseCategory) object;
+        return Objects.equals(id, that.id);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
