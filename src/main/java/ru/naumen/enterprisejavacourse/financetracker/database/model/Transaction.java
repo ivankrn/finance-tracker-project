@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.Currency;
 import java.util.Objects;
 
 @Entity
@@ -21,19 +22,29 @@ public class Transaction {
     @Setter(AccessLevel.NONE)
     private Long id;
 
-    @Setter(AccessLevel.NONE)
     @ManyToOne
     @JoinColumn(name = "transaction_category_id")
     private Category category;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "operation_type", nullable = false)
+    private OperationType operationType;
+
+    @ManyToOne
+    @JoinColumn(name = "bank_account_transaction")
+    private BankAccount bankAccount;
+
     @Column(nullable = false)
-    @Setter(AccessLevel.NONE)
     private BigDecimal amount = BigDecimal.ZERO;
 
     @Column(nullable = false)
     @NotBlank
     @Getter(AccessLevel.NONE)
     private final String currency = "RUS";
+
+    public Currency getCurrency() {
+        return Currency.getInstance(currency);
+    }
 
     @Override
     public boolean equals(Object object) {

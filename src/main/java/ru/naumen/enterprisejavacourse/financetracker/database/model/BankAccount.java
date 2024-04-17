@@ -6,7 +6,9 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.Currency;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "bank_account")
@@ -32,6 +34,9 @@ public class BankAccount {
     @NotBlank
     @Getter(AccessLevel.NONE)
     private final String currency = "RUS";
+
+    @OneToMany(mappedBy = "bankAccount")
+    private Set<Transaction> transaction = new HashSet<>();
 
     public Currency getCurrency() {
         return Currency.getInstance(currency);

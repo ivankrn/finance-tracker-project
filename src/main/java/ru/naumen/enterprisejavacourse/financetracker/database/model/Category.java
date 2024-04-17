@@ -25,7 +25,6 @@ public class Category {
     private Set<Transaction> transaction = new HashSet<>();
 
     @Column(nullable = false, unique = true)
-    @Setter(AccessLevel.NONE)
     private String name;
 
     @Override
