@@ -23,8 +23,8 @@ public class Transaction {
 
     @Setter(AccessLevel.NONE)
     @ManyToOne
-    @JoinColumn(name = "expense_category_id")
-    private ExpenseCategory category;
+    @JoinColumn(name = "transaction_category_id")
+    private Category category;
 
     @Column(nullable = false)
     @Setter(AccessLevel.NONE)

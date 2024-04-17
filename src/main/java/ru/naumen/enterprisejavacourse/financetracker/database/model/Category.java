@@ -8,16 +8,16 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "expense_category")
+@Table(name = "transaction_category")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class ExpenseCategory {
+public class Category {
 
     @Id
-    @SequenceGenerator(name = "expense_category_id_seq", sequenceName = "expense_category_id_seq", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "expense_category_id_seq")
+    @SequenceGenerator(name = "transaction_category_id_seq", sequenceName = "transaction_category_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "transaction_category_id_seq")
     @Setter(AccessLevel.NONE)
     private Long id;
 
@@ -26,13 +26,13 @@ public class ExpenseCategory {
 
     @Column(nullable = false, unique = true)
     @Setter(AccessLevel.NONE)
-    private String categoryName;
+    private String name;
 
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
-        ExpenseCategory that = (ExpenseCategory) object;
+        Category that = (Category) object;
         return Objects.equals(id, that.id);
     }
 
