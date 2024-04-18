@@ -36,7 +36,7 @@ public class BankAccount {
     private final String currency = "RUS";
 
     @OneToMany(mappedBy = "bankAccount")
-    private Set<Transaction> transaction = new HashSet<>();
+    private Set<Transaction> transactions = new HashSet<>();
 
     public Currency getCurrency() {
         return Currency.getInstance(currency);

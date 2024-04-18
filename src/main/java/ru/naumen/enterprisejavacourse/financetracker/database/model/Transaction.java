@@ -31,7 +31,7 @@ public class Transaction {
     private OperationType operationType;
 
     @ManyToOne
-    @JoinColumn(name = "bank_account_transaction")
+    @JoinColumn(name = "bank_account_transaction_id", nullable = false)
     private BankAccount bankAccount;
 
     @Column(nullable = false)
