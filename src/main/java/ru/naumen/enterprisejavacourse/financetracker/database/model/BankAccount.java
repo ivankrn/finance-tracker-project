@@ -10,6 +10,9 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * Банковский счет
+ */
 @Entity
 @Table(name = "bank_account")
 @Getter
@@ -34,18 +37,32 @@ public class BankAccount {
     @NotBlank
     @Getter(AccessLevel.NONE)
     private final String currency = "RUS";
-
     @OneToMany(mappedBy = "bankAccount")
     private Set<Transaction> transactions = new HashSet<>();
 
+    /**
+     * Возвращает валюту счета
+     *
+     * @return валюта
+     */
     public Currency getCurrency() {
         return Currency.getInstance(currency);
     }
 
+    /**
+     * Добавляет указанное количество денег к сумме на счету
+     *
+     * @param amount кол-во денег
+     */
     public void addAmount(BigDecimal amount) {
         this.amount = this.amount.add(amount);
     }
 
+    /**
+     * Вычитает указанное количество денег из суммы на счету
+     *
+     * @param amount кол-во денег
+     */
     public void subtractAmount(BigDecimal amount) {
         this.amount = this.amount.subtract(amount);
     }
