@@ -40,7 +40,7 @@ public class Transaction {
     @Column(nullable = false)
     @NotBlank
     @Getter(AccessLevel.NONE)
-    private final String currency = "RUS";
+    private String currency = "RUB";
 
     public Currency getCurrency() {
         return Currency.getInstance(currency);

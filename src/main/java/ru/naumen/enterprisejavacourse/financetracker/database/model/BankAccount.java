@@ -36,7 +36,7 @@ public class BankAccount {
     @Column(nullable = false)
     @NotBlank
     @Getter(AccessLevel.NONE)
-    private final String currency = "RUS";
+    private String currency = "RUB";
     @OneToMany(mappedBy = "bankAccount")
     private Set<Transaction> transactions = new HashSet<>();
 
