@@ -26,10 +26,6 @@ public class Transaction {
     @JoinColumn(name = "transaction_category_id")
     private Category category;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "operation_type", nullable = false)
-    private OperationType operationType;
-
     @ManyToOne
     @JoinColumn(name = "bank_account_transaction_id", nullable = false)
     private BankAccount bankAccount;
@@ -40,7 +36,7 @@ public class Transaction {
     @Column(nullable = false)
     @NotBlank
     @Getter(AccessLevel.NONE)
-    private final String currency = "RUS";
+    private String currency = "RUB";
 
     public Currency getCurrency() {
         return Currency.getInstance(currency);
