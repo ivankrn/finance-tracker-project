@@ -2,7 +2,6 @@ package ru.naumen.enterprisejavacourse.financetracker.service;
 
 import ru.naumen.enterprisejavacourse.financetracker.database.model.BankAccount;
 import ru.naumen.enterprisejavacourse.financetracker.database.model.Category;
-import ru.naumen.enterprisejavacourse.financetracker.database.model.Transaction;
 import ru.naumen.enterprisejavacourse.financetracker.exception.TransactionNotFoundException;
 
 import java.math.BigDecimal;
@@ -13,13 +12,22 @@ import java.math.BigDecimal;
 public interface TransactionService {
 
     /**
-     * Выполняет транзакцию по категории
+     * Пополняет счет указанной суммой
      *
      * @param category    категория транзакции
      * @param bankAccount счет
-     * @param amount      сумма транзакции
+     * @param amount      сумма пополнения
      */
-    void makeTransactionByCategory(Category category, BankAccount bankAccount, BigDecimal amount);
+    void accrual(Category category, BankAccount bankAccount, BigDecimal amount);
+
+    /**
+     * Снимает указанную сумму со счета
+     *
+     * @param category    категория транзакции
+     * @param bankAccount счет
+     * @param amount      сумма снятия
+     */
+    void withdraw(Category category, BankAccount bankAccount, BigDecimal amount);
 
     /**
      * Редактирует сумму транзакции с указанным ID
@@ -28,13 +36,12 @@ public interface TransactionService {
      * @param newAmount     новая сумма транзакции
      * @throws TransactionNotFoundException если транзакция не найдена
      */
-    void editTransaction(Long transactionId, BigDecimal newAmount);
+    void editTransaction(Long transactionId, BigDecimal newAmount, Category category);
 
     /**
      * Удаляет транзакцию с указанным ID.
      *
      * @param transactionId ID транзакции
-     * @throws TransactionNotFoundException если транзакция не найдена
      */
     void deleteTransaction(Long transactionId);
 }
