@@ -16,6 +16,7 @@
 	<properties>
 		<java.version>17</java.version>
 		<org.projectlombok.version>1.18.32</org.projectlombok.version>
+		<com.vaadin.version>24.3.9</com.vaadin.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -56,6 +57,19 @@
 			<artifactId>jakarta.persistence-api</artifactId>
 			<version>3.1.0</version>
 		</dependency>
+
+		<dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin</artifactId>
+			<version>${com.vaadin.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin-spring-boot-starter</artifactId>
+			<version>${com.vaadin.version}</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
