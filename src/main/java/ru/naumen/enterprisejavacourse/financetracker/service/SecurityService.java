@@ -1,4 +1,4 @@
-package ru.naumen.enterprisejavacourse.financetracker.view.auth.security;
+package ru.naumen.enterprisejavacourse.financetracker.service;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.server.VaadinServletRequest;
@@ -6,13 +6,24 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+/**
+ * Сервис безопасности
+ */
+@Service
 public class SecurityService {
 
+    /**
+     * URL для перенаправления после выхода из системы
+     * */
     private static final String LOGOUT_SUCCESS_URL = "/";
 
+    /**
+     * Получает аутентифицированного пользователя
+     *
+     * @return аутентифицированного пользователя. Возвращает null, если пользователь не аутентифицирован.
+     */
     public UserDetails getAuthenticatedUser() {
         SecurityContext context = SecurityContextHolder.getContext();
         Object principal = context.getAuthentication().getPrincipal();
@@ -23,6 +34,9 @@ public class SecurityService {
         return null;
     }
 
+    /**
+     * Выполняет выход пользователя из системы
+     */
     public void logout() {
         UI.getCurrent().getPage().setLocation(LOGOUT_SUCCESS_URL);
         SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();

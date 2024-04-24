@@ -8,14 +8,16 @@ import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
-import org.springframework.beans.factory.annotation.Autowired;
 import ru.naumen.enterprisejavacourse.financetracker.service.UserService;
 
+/**
+ * Представление для регистрации пользователя
+ */
 @Route("register")
 @AnonymousAllowed
 public class RegisterView extends VerticalLayout {
 
-    public RegisterView(@Autowired UserService userService) {
+    public RegisterView(UserService userService) {
         setSizeFull();
         setAlignItems(Alignment.CENTER);
         setJustifyContentMode(JustifyContentMode.CENTER);
@@ -27,7 +29,7 @@ public class RegisterView extends VerticalLayout {
             String username = usernameField.getValue();
             String password = passwordField.getValue();
 
-            if (username.isEmpty() || password.isEmpty()) {
+            if (username.isBlank() || password.isBlank()) {
                 Notification.show("Пожалуйста, введите логин и пароль");
             } else {
                 try {
