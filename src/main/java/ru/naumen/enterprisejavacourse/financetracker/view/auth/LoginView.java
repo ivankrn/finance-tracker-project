@@ -22,6 +22,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 @AnonymousAllowed
 public class LoginView extends VerticalLayout {
 
+    private static final String MAIN_PAGE_URL = "";
+
     public LoginView(AuthenticationManager authenticationManager) {
         setSizeFull();
         setAlignItems(Alignment.CENTER);
@@ -36,7 +38,7 @@ public class LoginView extends VerticalLayout {
                         new UsernamePasswordAuthenticationToken(usernameField.getValue(), passwordField.getValue())
                 );
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-                UI.getCurrent().navigate("");
+                UI.getCurrent().navigate(MAIN_PAGE_URL);
             } catch (AuthenticationException e) {
                 Notification.show(
                         "Ошибка входа: " + e.getMessage(),
