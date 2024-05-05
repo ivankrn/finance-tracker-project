@@ -1,22 +1,24 @@
 package ru.naumen.enterprisejavacourse.financetracker.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.Objects;
 
 /**
- * Объект категории
+ * DTO категории
  */
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class CategoryDto {
+    @NotNull(message = "Поле \"ID категории\" не может быть пустым")
+    private long id;
+
     @NotBlank(message = "Поле \"Имя категории\" не может быть пустым")
     @Size(min = 3, max = 15, message = "Имя категории должно содержать от 3 до 15 символов")
     private String name;
@@ -26,11 +28,11 @@ public class CategoryDto {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
         CategoryDto that = (CategoryDto) object;
-        return Objects.equals(name, that.name);
+        return id == that.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name);
+        return Objects.hash(id);
     }
 }
