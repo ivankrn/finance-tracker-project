@@ -12,6 +12,7 @@ import java.math.BigDecimal;
  */
 
 @Value
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class TransactionDto {
     @NotNull(message = "Поле \"ID транзакции\" не может быть пустым")
     @EqualsAndHashCode.Include

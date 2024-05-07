@@ -10,6 +10,7 @@ import lombok.Value;
  * DTO категории
  */
 @Value
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class CategoryDto {
     @NotNull(message = "Поле \"ID категории\" не может быть пустым")
     @EqualsAndHashCode.Include

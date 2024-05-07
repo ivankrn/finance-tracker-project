@@ -10,6 +10,7 @@ import java.math.BigDecimal;
  * DTO банковского счета
  */
 @Value
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class BankAccountDto {
     @NotNull(message = "Поле \"ID банковского счета\" не может быть пустым")
     @EqualsAndHashCode.Include

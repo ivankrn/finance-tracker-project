@@ -9,6 +9,7 @@ import lombok.Value;
  * DTO пользователя
  */
 @Value
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class UserDto {
     @NotBlank(message = "Поле \"Имя пользователя\" не должно быть пустым")
     @Size(min = 4, max = 15, message = "Имя пользователя должно содержать от 4 до 15 символов")
