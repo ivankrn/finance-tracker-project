@@ -55,5 +55,5 @@ public interface TransactionService {
      * @param endDate   конечная дата
      * @return список отфильтрованных и отсортированных транзакций
      */
-    List<TransactionDto> filterAndSortTransactionsByDate(LocalDateTime startDate, LocalDateTime endDate);
+    List<TransactionDto> findBetweenDatesAndSortByAmount(LocalDateTime startDate, LocalDateTime endDate);
 }
