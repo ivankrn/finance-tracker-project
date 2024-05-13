@@ -22,6 +22,7 @@ import java.util.Optional;
 public class TransactionServiceImpl implements TransactionService {
 
     private final TransactionRepository transactionRepository;
+    private final TransactionMapper transactionMapper;
 
     @Override
     public void accrual(Category category, BankAccount bankAccount, BigDecimal amount) {
@@ -58,7 +59,7 @@ public class TransactionServiceImpl implements TransactionService {
         transactions.sort(Comparator.comparing(Transaction::getAmount));
 
         return transactions.stream()
-                .map(TransactionMapper.INSTANCE::transactiontoTransactionDto)
+                .map(transactionMapper::transactionToTransactionDto)
                 .toList();
     }
 
