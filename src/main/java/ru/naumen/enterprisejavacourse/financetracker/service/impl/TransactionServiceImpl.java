@@ -6,11 +6,16 @@ import ru.naumen.enterprisejavacourse.financetracker.database.model.BankAccount;
 import ru.naumen.enterprisejavacourse.financetracker.database.model.Category;
 import ru.naumen.enterprisejavacourse.financetracker.database.model.Transaction;
 import ru.naumen.enterprisejavacourse.financetracker.database.repository.TransactionRepository;
+import ru.naumen.enterprisejavacourse.financetracker.dto.TransactionDto;
 import ru.naumen.enterprisejavacourse.financetracker.exception.TransactionNotFoundException;
 import ru.naumen.enterprisejavacourse.financetracker.service.TransactionService;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -47,6 +52,16 @@ public class TransactionServiceImpl implements TransactionService {
         transactionRepository.deleteById(transactionId);
     }
 
+    @Override
+    public List<TransactionDto> filterAndSortTransactionsByDate(LocalDateTime startDate, LocalDateTime endDate) {
+        List<Transaction> transactions = transactionRepository.findByCreatedAtBetween(startDate, endDate);
+        transactions.sort(Comparator.comparing(Transaction::getAmount));
+
+        return transactions.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
     /**
      * Создает новую транзакцию
      *
@@ -62,5 +77,15 @@ public class TransactionServiceImpl implements TransactionService {
         transaction.setAmount(amount);
 
         transactionRepository.save(transaction);
+    }
+
+    private TransactionDto convertToDto(Transaction transaction) {
+        return new TransactionDto(
+                transaction.getId(),
+                transaction.getCategory().getId(),
+                transaction.getBankAccount().getId(),
+                transaction.getAmount(),
+                transaction.getCreatedAt()
+        );
     }
 }

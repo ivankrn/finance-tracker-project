@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Value;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
  * DTO транзакции
@@ -27,4 +28,7 @@ public class TransactionDto {
     @NotNull(message = "Поле \"Сумма транзакции\" не может быть пустым")
     @DecimalMin(value = "0.0", message = "Сумма транзакции не может быть отрицательной")
     BigDecimal amount;
+
+    @NotNull(message = "Поле \"Дата\" не может быть пустым")
+    LocalDateTime createdAt;
 }
