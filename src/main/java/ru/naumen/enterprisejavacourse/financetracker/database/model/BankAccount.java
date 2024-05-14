@@ -26,6 +26,8 @@ public class BankAccount {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "bank_account_id_seq")
     @Setter(AccessLevel.NONE)
     private Long id;
+    @Column(nullable = false)
+    private String name;
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;

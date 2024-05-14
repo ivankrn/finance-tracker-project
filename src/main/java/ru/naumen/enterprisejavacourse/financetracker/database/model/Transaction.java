@@ -3,8 +3,10 @@ package ru.naumen.enterprisejavacourse.financetracker.database.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Currency;
 import java.util.Objects;
 
@@ -32,6 +34,11 @@ public class Transaction {
 
     @Column(nullable = false)
     private BigDecimal amount = BigDecimal.ZERO;
+
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
+    @Setter(AccessLevel.NONE)
+    private LocalDateTime createdAt;
 
     @Column(nullable = false)
     @NotBlank

@@ -6,10 +6,15 @@ import ru.naumen.enterprisejavacourse.financetracker.database.model.BankAccount;
 import ru.naumen.enterprisejavacourse.financetracker.database.model.Category;
 import ru.naumen.enterprisejavacourse.financetracker.database.model.Transaction;
 import ru.naumen.enterprisejavacourse.financetracker.database.repository.TransactionRepository;
+import ru.naumen.enterprisejavacourse.financetracker.dto.TransactionDto;
 import ru.naumen.enterprisejavacourse.financetracker.exception.TransactionNotFoundException;
+import ru.naumen.enterprisejavacourse.financetracker.mapper.TransactionMapper;
 import ru.naumen.enterprisejavacourse.financetracker.service.TransactionService;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -17,6 +22,7 @@ import java.util.Optional;
 public class TransactionServiceImpl implements TransactionService {
 
     private final TransactionRepository transactionRepository;
+    private final TransactionMapper transactionMapper;
 
     @Override
     public void accrual(Category category, BankAccount bankAccount, BigDecimal amount) {
@@ -45,6 +51,16 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public void deleteTransaction(Long transactionId) {
         transactionRepository.deleteById(transactionId);
+    }
+
+    @Override
+    public List<TransactionDto> findBetweenDatesAndSortByAmount(LocalDateTime startDate, LocalDateTime endDate) {
+        List<Transaction> transactions = transactionRepository.findByCreatedAtBetween(startDate, endDate);
+        transactions.sort(Comparator.comparing(Transaction::getAmount));
+
+        return transactions.stream()
+                .map(transactionMapper::transactionToTransactionDto)
+                .toList();
     }
 
     /**

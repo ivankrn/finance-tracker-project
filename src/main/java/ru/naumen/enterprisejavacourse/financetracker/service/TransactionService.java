@@ -2,9 +2,12 @@ package ru.naumen.enterprisejavacourse.financetracker.service;
 
 import ru.naumen.enterprisejavacourse.financetracker.database.model.BankAccount;
 import ru.naumen.enterprisejavacourse.financetracker.database.model.Category;
+import ru.naumen.enterprisejavacourse.financetracker.dto.TransactionDto;
 import ru.naumen.enterprisejavacourse.financetracker.exception.TransactionNotFoundException;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * Сервис для выполнения транзакций
@@ -44,4 +47,13 @@ public interface TransactionService {
      * @param transactionId ID транзакции
      */
     void deleteTransaction(Long transactionId);
+
+    /**
+     * Фильтрует транзакции по дате и сортирует их по сумме
+     *
+     * @param startDate начальная дата
+     * @param endDate   конечная дата
+     * @return список отфильтрованных и отсортированных транзакций
+     */
+    List<TransactionDto> findBetweenDatesAndSortByAmount(LocalDateTime startDate, LocalDateTime endDate);
 }
