@@ -1,0 +1,92 @@
+.register-view {
+    background-color: #FAF8F4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
+
+.register-layout {
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 400px;
+    position: relative;
+    z-index: 1;
+}
+
+.button-layout {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.login-button, .register-button {
+    background-color: #87CEFA;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 0 8px;
+}
+
+.register-button {
+    background-color: white;
+    color: black;
+    border: 1px solid #ccc;
+}
+
+.welcome-message {
+    font-size: 1.5rem;
+    color: #000;
+    margin-bottom: 16px;
+}
+
+.username-field, .password-field {
+    width: 100%;
+    max-width: 320px;
+    margin-bottom: 16px;
+}
+
+.register-button-main {
+    background-color: #87CEFA;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    max-width: 320px;
+    margin-bottom: 16px;
+}
+
+.login-link {
+    color: #76c8a6;
+    font-weight: bold;
+    text-decoration: none;
+    margin-top: 12px;
+    display: block;
+}
+
+.login-link:hover {
+    text-decoration: underline;
+}
+
+.register-view::before {
+    content: 'SMARTMONEY';
+    font-size: 100px;
+    color: rgba(0, 0, 255, 0.2);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 0;
+}

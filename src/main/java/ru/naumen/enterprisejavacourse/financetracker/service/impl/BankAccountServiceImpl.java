@@ -8,7 +8,6 @@ import ru.naumen.enterprisejavacourse.financetracker.database.model.User;
 import ru.naumen.enterprisejavacourse.financetracker.database.repository.BankAccountRepository;
 import ru.naumen.enterprisejavacourse.financetracker.dto.BankAccountDto;
 import ru.naumen.enterprisejavacourse.financetracker.exception.BankAccountDeletionException;
-import ru.naumen.enterprisejavacourse.financetracker.exception.CategoryDeletionException;
 import ru.naumen.enterprisejavacourse.financetracker.mapper.BankAccountMapper;
 import ru.naumen.enterprisejavacourse.financetracker.service.BankAccountService;
 
