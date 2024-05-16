@@ -15,6 +15,9 @@ import ru.naumen.enterprisejavacourse.financetracker.service.SecurityService;
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * Представление для добавления банковских счетов
+ */
 @Route("bank-accounts/add")
 @PermitAll
 public class AddBankAccountView extends VerticalLayout {

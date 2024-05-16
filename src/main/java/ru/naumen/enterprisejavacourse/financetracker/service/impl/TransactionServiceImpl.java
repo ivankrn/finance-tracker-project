@@ -80,7 +80,7 @@ public class TransactionServiceImpl implements TransactionService {
      * @param date          дата совершения транзакции
      */
     @Transactional
-    private void createTransaction(long bankAccountId, long categoryId, BigDecimal amount, LocalDateTime date) {
+    public void createTransaction(long bankAccountId, long categoryId, BigDecimal amount, LocalDateTime date) {
         Optional<BankAccount> bankAccountOptional = bankAccountRepository.findById(bankAccountId);
         if (bankAccountOptional.isPresent()) {
             BankAccount bankAccount = bankAccountOptional.get();

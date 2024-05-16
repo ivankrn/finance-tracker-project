@@ -9,6 +9,9 @@ import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.PermitAll;
 import ru.naumen.enterprisejavacourse.financetracker.service.CategoryService;
 
+/**
+ * Представление для добавления категорий
+ */
 @Route("categories/add")
 @PermitAll
 public class AddCategoryView extends VerticalLayout {

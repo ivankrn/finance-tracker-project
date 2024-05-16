@@ -24,21 +24,21 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Optional;
 
+/**
+ * Представление для добавления транзакций
+ */
 @Route("bank-accounts/:bankAccountId?/transactions/add")
 @PermitAll
 public class AddTransactionView extends VerticalLayout implements BeforeEnterObserver {
 
-    private final SecurityService securityService;
     private final CategoryService categoryService;
     private final TransactionService transactionService;
     private Long bankAccountId;
 
-    public AddTransactionView(SecurityService securityService,
-                              TransactionService transactionService,
+    public AddTransactionView(TransactionService transactionService,
                               CategoryService categoryService) {
         H1 header = new H1("Добавить транзакцию");
         add(header);
-        this.securityService = securityService;
         this.transactionService = transactionService;
         this.categoryService = categoryService;
     }

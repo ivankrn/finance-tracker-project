@@ -6,15 +6,20 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.html.UnorderedList;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 import jakarta.annotation.security.PermitAll;
 import ru.naumen.enterprisejavacourse.financetracker.dto.CategoryDto;
+import ru.naumen.enterprisejavacourse.financetracker.exception.CategoryDeletionException;
 import ru.naumen.enterprisejavacourse.financetracker.service.CategoryService;
 
 import java.util.List;
 
+/**
+ * Представление для просмотра категорий
+ */
 @Route("categories")
 @PermitAll
 public class CategoriesView extends VerticalLayout {
@@ -36,8 +41,12 @@ public class CategoriesView extends VerticalLayout {
             Div div = new Div();
             Paragraph name = new Paragraph(category.getName());
             Button deleteButton = new Button("Удалить", e -> {
-                categoryService.delete(category.getId());
-                UI.getCurrent().getPage().reload();
+                try {
+                    categoryService.delete(category.getId());
+                    UI.getCurrent().getPage().reload();
+                } catch (CategoryDeletionException ex) {
+                    Notification.show(ex.getMessage());
+                }
             });
             div.add(name, deleteButton);
             list.add(div);

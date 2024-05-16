@@ -1,11 +1,14 @@
 package ru.naumen.enterprisejavacourse.financetracker.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import ru.naumen.enterprisejavacourse.financetracker.database.model.BankAccount;
 import ru.naumen.enterprisejavacourse.financetracker.database.model.User;
 import ru.naumen.enterprisejavacourse.financetracker.database.repository.BankAccountRepository;
 import ru.naumen.enterprisejavacourse.financetracker.dto.BankAccountDto;
+import ru.naumen.enterprisejavacourse.financetracker.exception.BankAccountDeletionException;
+import ru.naumen.enterprisejavacourse.financetracker.exception.CategoryDeletionException;
 import ru.naumen.enterprisejavacourse.financetracker.mapper.BankAccountMapper;
 import ru.naumen.enterprisejavacourse.financetracker.service.BankAccountService;
 
@@ -36,7 +39,12 @@ public class BankAccountServiceImpl implements BankAccountService {
 
     @Override
     public void delete(long accountId) {
-        repository.deleteById(accountId);
+        try {
+            repository.deleteById(accountId);
+        } catch (DataIntegrityViolationException ex) {
+            throw new BankAccountDeletionException("Невозможно удалить банковский счет из-за связных с ним транзакций");
+        }
+
     }
 
 }
