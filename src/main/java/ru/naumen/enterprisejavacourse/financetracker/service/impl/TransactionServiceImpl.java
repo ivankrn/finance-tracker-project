@@ -2,9 +2,11 @@ package ru.naumen.enterprisejavacourse.financetracker.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.naumen.enterprisejavacourse.financetracker.database.model.BankAccount;
-import ru.naumen.enterprisejavacourse.financetracker.database.model.Category;
 import ru.naumen.enterprisejavacourse.financetracker.database.model.Transaction;
+import ru.naumen.enterprisejavacourse.financetracker.database.repository.BankAccountRepository;
+import ru.naumen.enterprisejavacourse.financetracker.database.repository.CategoryRepository;
 import ru.naumen.enterprisejavacourse.financetracker.database.repository.TransactionRepository;
 import ru.naumen.enterprisejavacourse.financetracker.dto.TransactionDto;
 import ru.naumen.enterprisejavacourse.financetracker.exception.TransactionNotFoundException;
@@ -22,61 +24,75 @@ import java.util.Optional;
 public class TransactionServiceImpl implements TransactionService {
 
     private final TransactionRepository transactionRepository;
+    private final BankAccountRepository bankAccountRepository;
+    private final CategoryRepository categoryRepository;
     private final TransactionMapper transactionMapper;
 
     @Override
-    public void accrual(Category category, BankAccount bankAccount, BigDecimal amount) {
-        createTransaction(category, bankAccount, amount.abs());
+    public void accrual(long bankAccountId, long categoryId, BigDecimal amount, LocalDateTime date) {
+        createTransaction(bankAccountId, categoryId, amount.abs(), date);
     }
 
     @Override
-    public void withdraw(Category category, BankAccount bankAccount, BigDecimal amount) {
-        createTransaction(category, bankAccount, amount.abs().negate());
+    public void withdraw(long bankAccountId, long categoryId, BigDecimal amount, LocalDateTime date) {
+        createTransaction(bankAccountId, categoryId, amount.abs().negate(), date);
     }
 
     @Override
-    public void editTransaction(Long transactionId, BigDecimal newAmount, Category category) {
+    @Transactional
+    public void editTransaction(long transactionId, long newCategoryId, BigDecimal newAmount, LocalDateTime newDate) {
         Optional<Transaction> transaction = transactionRepository.findById(transactionId);
         if (transaction.isPresent()) {
             Transaction currentTransaction = transaction.get();
             currentTransaction.setAmount(newAmount);
-            currentTransaction.setCategory(category);
+            currentTransaction.setCategory(categoryRepository.getReferenceById(newCategoryId));
+            currentTransaction.setDate(newDate);
             transactionRepository.save(currentTransaction);
-        }
-        else {
+        } else {
             throw new TransactionNotFoundException("Транзакция с id = " + transactionId + " не найдена");
         }
     }
 
     @Override
-    public void deleteTransaction(Long transactionId) {
+    public void deleteTransactionById(long transactionId) {
         transactionRepository.deleteById(transactionId);
     }
 
     @Override
-    public List<TransactionDto> findBetweenDatesAndSortByAmount(LocalDateTime startDate, LocalDateTime endDate) {
-        List<Transaction> transactions = transactionRepository.findByCreatedAtBetween(startDate, endDate);
+    public List<TransactionDto> findAllForBankAccountId(long bankAccountId) {
+        return transactionRepository.findByBankAccountIdOrderByDateDesc(bankAccountId).stream().map(transactionMapper::transactionToTransactionDto).toList();
+    }
+
+    @Override
+    public List<TransactionDto> findBetweenDatesAndSortByAmount(long bankAccountId, LocalDateTime startDate, LocalDateTime endDate) {
+        List<Transaction> transactions = transactionRepository.findByBankAccountIdAndDateBetween(bankAccountId, startDate, endDate);
         transactions.sort(Comparator.comparing(Transaction::getAmount));
 
-        return transactions.stream()
-                .map(transactionMapper::transactionToTransactionDto)
-                .toList();
+        return transactions.stream().map(transactionMapper::transactionToTransactionDto).toList();
     }
 
     /**
      * Создает новую транзакцию
      *
-     * @param category    категория транзакции
-     * @param bankAccount счет
-     * @param amount      сумма транзакции
+     * @param bankAccountId ID счета
+     * @param categoryId    ID категории транзакции
+     * @param amount        сумма транзакции
+     * @param date          дата совершения транзакции
      */
-    private void createTransaction(Category category, BankAccount bankAccount, BigDecimal amount) {
-        Transaction transaction = new Transaction();
-
-        transaction.setCategory(category);
-        transaction.setBankAccount(bankAccount);
-        transaction.setAmount(amount);
-
-        transactionRepository.save(transaction);
+    @Transactional
+    private void createTransaction(long bankAccountId, long categoryId, BigDecimal amount, LocalDateTime date) {
+        Optional<BankAccount> bankAccountOptional = bankAccountRepository.findById(bankAccountId);
+        if (bankAccountOptional.isPresent()) {
+            BankAccount bankAccount = bankAccountOptional.get();
+            Transaction transaction = new Transaction();
+            transaction.setCategory(categoryRepository.getReferenceById(categoryId));
+            transaction.setBankAccount(bankAccount);
+            transaction.setAmount(amount);
+            transaction.setDate(date);
+            transactionRepository.save(transaction);
+            bankAccount.addAmount(transaction.getAmount());
+            bankAccountRepository.save(bankAccount);
+        }
     }
+
 }

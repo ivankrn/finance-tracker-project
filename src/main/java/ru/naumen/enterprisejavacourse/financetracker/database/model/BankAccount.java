@@ -32,7 +32,6 @@ public class BankAccount {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
     @Column(nullable = false)
-    @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
     private BigDecimal amount = BigDecimal.ZERO;
     @Column(nullable = false)

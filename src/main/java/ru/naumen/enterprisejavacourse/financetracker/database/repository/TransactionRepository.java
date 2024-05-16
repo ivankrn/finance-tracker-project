@@ -14,9 +14,12 @@ public interface TransactionRepository extends CrudRepository<Transaction, Long>
     /**
      * Получаем транзакции, отфильтрованные по дате
      *
-     * @param startDate начальная дата
-     * @param endDate   конечная дата
+     * @param bankAccountId ID счета
+     * @param startDate     начальная дата
+     * @param endDate       конечная дата
      * @return список отфильтрованных транзакций
      */
-    List<Transaction> findByCreatedAtBetween(LocalDateTime startDate, LocalDateTime endDate);
+    List<Transaction> findByBankAccountIdAndDateBetween(long bankAccountId, LocalDateTime startDate, LocalDateTime endDate);
+
+    List<Transaction> findByBankAccountIdOrderByDateDesc(long bankAccountId);
 }

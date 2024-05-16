@@ -9,7 +9,7 @@ import ru.naumen.enterprisejavacourse.financetracker.dto.TransactionDto;
 /**
  * Интерфейс маппера для конвертации сущностей Transaction в объекты TransactionDto
  */
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = CategoryMapper.class)
 public interface TransactionMapper {
 
     /**
@@ -19,7 +19,6 @@ public interface TransactionMapper {
      * @return TransactionDto на основе сущности Transaction
      */
     @Mappings({
-            @Mapping(source = "category.id", target = "categoryId"),
             @Mapping(source = "bankAccount.id", target = "bankAccountId")
     })
     TransactionDto transactionToTransactionDto(Transaction transaction);
