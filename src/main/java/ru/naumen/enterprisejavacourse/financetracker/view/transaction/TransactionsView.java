@@ -1,11 +1,9 @@
 package ru.naumen.enterprisejavacourse.financetracker.view.transaction;
 
 import com.storedobject.chart.*;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datetimepicker.DateTimePicker;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -27,6 +25,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Представление для отображения транзакций
+ */
 @Route("bank-accounts/:bankAccountId/transactions")
 @PermitAll
 public class TransactionsView extends VerticalLayout implements BeforeEnterObserver {
@@ -47,12 +48,18 @@ public class TransactionsView extends VerticalLayout implements BeforeEnterObser
         this.transactionService = transactionService;
         this.bankAccountService = bankAccountService;
         this.securityService = securityService;
+
         H1 header = new H1("Транзакции на счету");
         add(header);
         configureFilter();
         configureGrid();
         configureCharts();
-        add(new Anchor("javascript:history.back()", "Назад"));
+        configureBackNavigation();
+    }
+
+    private void configureBackNavigation() {
+        Button backButton = new Button("Назад", event -> getUI().ifPresent(ui -> ui.getPage().getHistory().back()));
+        add(backButton);
     }
 
     @Override
@@ -61,10 +68,14 @@ public class TransactionsView extends VerticalLayout implements BeforeEnterObser
         if (bankAccountIdParam.isPresent()) {
             this.bankAccountId = Long.valueOf(bankAccountIdParam.get());
             User user = (User) securityService.getAuthenticatedUser();
-            if (bankAccountService.findByIdAndUserId(bankAccountId, user.getId())) {
-                fillTransactionsList();
-                fillCharts();
-                add(new RouterLink("Добавить транзакцию", AddTransactionView.class, new RouteParameters(new RouteParam("bankAccountId", bankAccountIdParam.get()))),
+            if (bankAccountService.hasBankAccountWithId(bankAccountId, user.getId())) {
+                try {
+                    updateView();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+                add(new RouterLink("Добавить транзакцию", AddTransactionView.class,
+                                new RouteParameters(new RouteParam("bankAccountId", bankAccountIdParam.get()))),
                         new RouterLink("Создать категорию", AddCategoryView.class));
             } else {
                 event.forwardTo(BankAccountsView.class);
@@ -78,15 +89,16 @@ public class TransactionsView extends VerticalLayout implements BeforeEnterObser
 
     private void configureFilter() {
         HorizontalLayout filterLayout = new HorizontalLayout();
-
         startDatePicker = new DateTimePicker("Дата начала");
         endDatePicker = new DateTimePicker("Дата окончания");
 
         Button filterButton = new Button("Фильтровать", e -> {
-            fillTransactionsList();
-            fillCharts();
+            try {
+                updateView();
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
         });
-
         filterLayout.add(startDatePicker, endDatePicker, filterButton);
         add(filterLayout);
     }
@@ -99,7 +111,11 @@ public class TransactionsView extends VerticalLayout implements BeforeEnterObser
         grid.addComponentColumn(item ->
                 new Button("Удалить", e -> {
                     transactionService.deleteTransactionById(item.getId());
-                    UI.getCurrent().getPage().reload();
+                    try {
+                        updateView();
+                    } catch (Exception ex) {
+                        throw new RuntimeException(ex);
+                    }
                 })
         );
         add(grid);
@@ -113,31 +129,33 @@ public class TransactionsView extends VerticalLayout implements BeforeEnterObser
         add(expenseChart, incomeChart);
     }
 
-    private void fillTransactionsList() {
-        List<TransactionDto> transactions;
+    private void updateView() throws Exception {
+        List<TransactionDto> transactions = getFilteredTransactions();
+        fillTransactionsList(transactions);
+        fillCharts(transactions);
+    }
 
-        LocalDateTime startDate =
-                startDatePicker.getValue() != null ? startDatePicker.getValue() : null;
-        LocalDateTime endDate =
-                endDatePicker.getValue() != null ? endDatePicker.getValue() : null;
+    private List<TransactionDto> getFilteredTransactions() {
+        LocalDateTime startDate = startDatePicker.getValue();
+        LocalDateTime endDate = endDatePicker.getValue();
 
         if (startDate != null && endDate != null) {
-            transactions = transactionService.findBetweenDatesAndSortByAmount(bankAccountId, startDate, endDate);
+            return transactionService.findBetweenDatesAndSortByAmount(bankAccountId, startDate, endDate);
         } else {
-            transactions = transactionService.findAllForBankAccountId(bankAccountId);
+            return transactionService.findAllForBankAccountId(bankAccountId);
         }
+    }
 
+    private void fillTransactionsList(List<TransactionDto> transactions) {
         grid.setItems(transactions);
     }
 
-    private void fillCharts() {
-        List<TransactionDto> transactions = transactionService.findAllForBankAccountId(bankAccountId);
-
+    private void fillCharts(List<TransactionDto> transactions) throws Exception {
         Map<String, BigDecimal> expenseSums = transactions.stream()
                 .filter(t -> t.getAmount().compareTo(BigDecimal.ZERO) < 0)
                 .collect(Collectors.groupingBy(
                         t -> t.getCategory().getName(),
-                        Collectors.reducing(BigDecimal.ZERO, TransactionDto::getAmount, BigDecimal::add)
+                        Collectors.reducing(BigDecimal.ZERO, t -> t.getAmount().abs(), BigDecimal::add)
                 ));
 
         Map<String, BigDecimal> incomeSums = transactions.stream()
@@ -147,30 +165,25 @@ public class TransactionsView extends VerticalLayout implements BeforeEnterObser
                         Collectors.reducing(BigDecimal.ZERO, TransactionDto::getAmount, BigDecimal::add)
                 ));
 
-        CategoryData expenseLabels = new CategoryData();
-        Data expenseData = new Data();
+        updateChart(expenseChart, "Расходы по категориям", expenseSums);
+        updateChart(incomeChart, "Доходы по категориям", incomeSums);
+    }
 
-        expenseSums.forEach((category, amount) -> {
-            expenseLabels.add(category);
-            expenseData.add(amount.doubleValue());
+    private void updateChart(SOChart chart, String titleText, Map<String, BigDecimal> data) throws Exception {
+        CategoryData labels = new CategoryData();
+        Data chartData = new Data();
+
+        data.forEach((category, amount) -> {
+            labels.add(category);
+            chartData.add(amount.doubleValue());
         });
 
-        PieChart expensePieChart = new PieChart(expenseLabels, expenseData);
-        Title expenseTitle = new Title("Расходы по категориям");
-        expenseChart.removeAll();
-        expenseChart.add(expensePieChart, expenseTitle);
+        PieChart pieChart = new PieChart(labels, chartData);
+        Title title = new Title(titleText);
 
-        CategoryData incomeLabels = new CategoryData();
-        Data incomeData = new Data();
-
-        incomeSums.forEach((category, amount) -> {
-            incomeLabels.add(category);
-            incomeData.add(amount.doubleValue());
-        });
-
-        PieChart incomePieChart = new PieChart(incomeLabels, incomeData);
-        Title incomeTitle = new Title("Доходы по категориям");
-        incomeChart.removeAll();
-        incomeChart.add(incomePieChart, incomeTitle);
+        chart.removeAll();
+        chart.add(pieChart);
+        chart.add(title);
+        chart.update();
     }
 }

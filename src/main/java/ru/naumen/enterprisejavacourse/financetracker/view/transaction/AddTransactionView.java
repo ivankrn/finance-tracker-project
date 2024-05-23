@@ -4,7 +4,6 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
-import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
@@ -37,11 +36,17 @@ public class AddTransactionView extends VerticalLayout implements BeforeEnterObs
 
     public AddTransactionView(TransactionService transactionService,
                               CategoryService categoryService) {
-        H1 header = new H1("Добавить транзакцию");
-        add(header);
-        add(new Anchor("javascript:history.back()", "Назад"));
         this.transactionService = transactionService;
         this.categoryService = categoryService;
+        H1 header = new H1("Добавить транзакцию");
+        add(header);
+        configureBackNavigation();
+    }
+
+    private void configureBackNavigation() {
+        Button backButton = new Button(
+                "Назад", event -> getUI().ifPresent(ui -> ui.getPage().getHistory().back()));
+        add(backButton);
     }
 
     @Override

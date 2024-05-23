@@ -28,8 +28,14 @@ public class CategoriesView extends VerticalLayout {
         H1 header = new H1("Категории трат");
         add(header);
         add(new RouterLink("Добавить категорию", AddCategoryView.class));
-        add(new Anchor("javascript:history.back()", "Назад"));
+        configureBackNavigation();
         fillCategoriesList();
+    }
+
+    private void configureBackNavigation() {
+        Button backButton = new Button(
+                "Назад", event -> getUI().ifPresent(ui -> ui.getPage().getHistory().back()));
+        add(backButton);
     }
 
     private void fillCategoriesList() {

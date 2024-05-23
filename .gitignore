@@ -35,3 +35,4 @@ build/
 .vscode/
 /src/main/bundles/
 /node_modules/
+/frontend/generated/

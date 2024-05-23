@@ -2,7 +2,6 @@ package ru.naumen.enterprisejavacourse.financetracker.view.category;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -20,7 +19,7 @@ public class AddCategoryView extends VerticalLayout {
     public AddCategoryView(CategoryService categoryService) {
         H1 header = new H1("Добавить категорию трат");
         add(header);
-        add(new Anchor("javascript:history.back()", "Назад"));
+        configureBackNavigation();
         TextField name = new TextField("Название");
         add(name);
         Button save = new Button("Сохранить", buttonClickEvent -> {
@@ -28,6 +27,12 @@ public class AddCategoryView extends VerticalLayout {
             UI.getCurrent().navigate(CategoriesView.class);
         });
         add(save);
+    }
+
+    private void configureBackNavigation() {
+        Button backButton = new Button(
+                "Назад", event -> getUI().ifPresent(ui -> ui.getPage().getHistory().back()));
+        add(backButton);
     }
 
 }

@@ -14,9 +14,9 @@ public interface BankAccountService {
     /**
      * Создает счет для пользователя
      *
-     * @param user пользователь
-     * @param name название счета
-     * @param amount сумма счета
+     * @param user         пользователь
+     * @param name         название счета
+     * @param amount       сумма счета
      * @param currencyCode валюта счета
      */
     void addForUser(User user, String name, BigDecimal amount, String currencyCode);
@@ -30,5 +30,12 @@ public interface BankAccountService {
      */
     void delete(long accountId);
 
-    boolean findByIdAndUserId(Long bankAccountId, Long id);
+    /**
+     * Проверяет, существует ли банковский счет у пользователя с заданным идентификатором
+     *
+     * @param bankAccountId идентификатор банковского счета
+     * @param id            идентификатор пользователя
+     * @return true, если банковский счет существует для данного пользователя, иначе false
+     */
+    boolean hasBankAccountWithId(Long bankAccountId, Long id);
 }
