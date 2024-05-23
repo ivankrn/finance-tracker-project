@@ -46,4 +46,9 @@ public class BankAccountServiceImpl implements BankAccountService {
 
     }
 
+    @Override
+    public boolean findByIdAndUserId(Long bankAccountId, Long id) {
+        return repository.findByIdAndUserId(bankAccountId, id) != null;
+    }
+
 }

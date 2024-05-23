@@ -1,11 +1,11 @@
 package ru.naumen.enterprisejavacourse.financetracker.view.auth;
 
 import com.vaadin.flow.component.dependency.CssImport;
-import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 
 /**
@@ -29,7 +29,7 @@ public class LoginView extends VerticalLayout {
         login.setForgotPasswordButtonVisible(false);
         login.addClassName("login-form");
 
-        Anchor registerLink = new Anchor("register", "Регистрация");
+        RouterLink registerLink = new RouterLink("Зарегистрироваться", RegisterView.class);
         registerLink.addClassName("register-link");
 
         VerticalLayout loginLayout = new VerticalLayout(welcomeMessage, login, registerLink);

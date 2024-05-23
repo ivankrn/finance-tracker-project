@@ -3,6 +3,7 @@ package ru.naumen.enterprisejavacourse.financetracker.view.bankaccount;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -37,6 +38,7 @@ public class BankAccountsView extends VerticalLayout {
         add(header);
         fillAccountsList();
         add(new RouterLink("Добавить счет", AddBankAccountView.class));
+        add(new Anchor("javascript:history.back()", "Назад"));
     }
 
     private void fillAccountsList() {
@@ -47,11 +49,11 @@ public class BankAccountsView extends VerticalLayout {
         grid.addColumn(BankAccountDto::getAmount).setHeader("Сумма счета");
         grid.addColumn(BankAccountDto::getCurrency).setHeader("Валюта счета");
         grid.addComponentColumn(item ->
-                new Button("Посмотреть операции", e -> {
-                    UI.getCurrent().navigate(
-                            TransactionsView.class,
-                            new RouteParameters(new RouteParam("bankAccountId", String.valueOf(item.getId()))));
-                })
+                    new Button("Посмотреть операции", e -> {
+                        UI.getCurrent().navigate(
+                                TransactionsView.class,
+                                new RouteParameters(new RouteParam("bankAccountId", String.valueOf(item.getId()))));
+                    })
         );
         grid.addComponentColumn(item ->
                 new Button("Удалить", e -> {

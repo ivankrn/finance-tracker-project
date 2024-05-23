@@ -24,7 +24,6 @@ public class MainView extends VerticalLayout {
     public MainView(SecurityService securityService) {
         H1 logo = new H1("Финансовый дневник");
         logo.addClassName("logo");
-
         VerticalLayout header;
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

@@ -3,6 +3,7 @@ package ru.naumen.enterprisejavacourse.financetracker.view.bankaccount;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -41,6 +42,7 @@ public class AddBankAccountView extends VerticalLayout {
             UI.getCurrent().navigate(BankAccountsView.class);
         });
         add(saveButton);
+        add(new Anchor("javascript:history.back()", "Назад"));
     }
 
 }

@@ -30,4 +30,5 @@ public interface BankAccountService {
      */
     void delete(long accountId);
 
+    boolean findByIdAndUserId(Long bankAccountId, Long id);
 }

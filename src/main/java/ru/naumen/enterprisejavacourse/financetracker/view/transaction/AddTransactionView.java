@@ -4,6 +4,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
@@ -15,7 +16,6 @@ import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.PermitAll;
 import ru.naumen.enterprisejavacourse.financetracker.dto.CategoryDto;
 import ru.naumen.enterprisejavacourse.financetracker.service.CategoryService;
-import ru.naumen.enterprisejavacourse.financetracker.service.SecurityService;
 import ru.naumen.enterprisejavacourse.financetracker.service.TransactionService;
 import ru.naumen.enterprisejavacourse.financetracker.view.bankaccount.BankAccountsView;
 
@@ -39,6 +39,7 @@ public class AddTransactionView extends VerticalLayout implements BeforeEnterObs
                               CategoryService categoryService) {
         H1 header = new H1("Добавить транзакцию");
         add(header);
+        add(new Anchor("javascript:history.back()", "Назад"));
         this.transactionService = transactionService;
         this.categoryService = categoryService;
     }

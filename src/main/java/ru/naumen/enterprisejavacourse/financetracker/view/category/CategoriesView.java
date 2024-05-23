@@ -2,10 +2,7 @@ package ru.naumen.enterprisejavacourse.financetracker.view.category;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.Paragraph;
-import com.vaadin.flow.component.html.UnorderedList;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
@@ -31,6 +28,7 @@ public class CategoriesView extends VerticalLayout {
         H1 header = new H1("Категории трат");
         add(header);
         add(new RouterLink("Добавить категорию", AddCategoryView.class));
+        add(new Anchor("javascript:history.back()", "Назад"));
         fillCategoriesList();
     }
 

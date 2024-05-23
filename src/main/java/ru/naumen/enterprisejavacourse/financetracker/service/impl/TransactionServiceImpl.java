@@ -29,11 +29,13 @@ public class TransactionServiceImpl implements TransactionService {
     private final TransactionMapper transactionMapper;
 
     @Override
+    @Transactional
     public void accrual(long bankAccountId, long categoryId, BigDecimal amount, LocalDateTime date) {
         createTransaction(bankAccountId, categoryId, amount.abs(), date);
     }
 
     @Override
+    @Transactional
     public void withdraw(long bankAccountId, long categoryId, BigDecimal amount, LocalDateTime date) {
         createTransaction(bankAccountId, categoryId, amount.abs().negate(), date);
     }
@@ -79,8 +81,7 @@ public class TransactionServiceImpl implements TransactionService {
      * @param amount        сумма транзакции
      * @param date          дата совершения транзакции
      */
-    @Transactional
-    public void createTransaction(long bankAccountId, long categoryId, BigDecimal amount, LocalDateTime date) {
+    private void createTransaction(long bankAccountId, long categoryId, BigDecimal amount, LocalDateTime date) {
         Optional<BankAccount> bankAccountOptional = bankAccountRepository.findById(bankAccountId);
         if (bankAccountOptional.isPresent()) {
             BankAccount bankAccount = bankAccountOptional.get();
