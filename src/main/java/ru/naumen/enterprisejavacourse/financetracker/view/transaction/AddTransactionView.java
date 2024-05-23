@@ -15,7 +15,6 @@ import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.PermitAll;
 import ru.naumen.enterprisejavacourse.financetracker.dto.CategoryDto;
 import ru.naumen.enterprisejavacourse.financetracker.service.CategoryService;
-import ru.naumen.enterprisejavacourse.financetracker.service.SecurityService;
 import ru.naumen.enterprisejavacourse.financetracker.service.TransactionService;
 import ru.naumen.enterprisejavacourse.financetracker.view.bankaccount.BankAccountsView;
 
@@ -24,23 +23,30 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Optional;
 
+/**
+ * Представление для добавления транзакций
+ */
 @Route("bank-accounts/:bankAccountId?/transactions/add")
 @PermitAll
 public class AddTransactionView extends VerticalLayout implements BeforeEnterObserver {
 
-    private final SecurityService securityService;
     private final CategoryService categoryService;
     private final TransactionService transactionService;
     private Long bankAccountId;
 
-    public AddTransactionView(SecurityService securityService,
-                              TransactionService transactionService,
+    public AddTransactionView(TransactionService transactionService,
                               CategoryService categoryService) {
-        H1 header = new H1("Добавить транзакцию");
-        add(header);
-        this.securityService = securityService;
         this.transactionService = transactionService;
         this.categoryService = categoryService;
+        H1 header = new H1("Добавить транзакцию");
+        add(header);
+        configureBackNavigation();
+    }
+
+    private void configureBackNavigation() {
+        Button backButton = new Button(
+                "Назад", event -> getUI().ifPresent(ui -> ui.getPage().getHistory().back()));
+        add(backButton);
     }
 
     @Override

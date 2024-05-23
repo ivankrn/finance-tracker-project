@@ -9,6 +9,9 @@ import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.PermitAll;
 import ru.naumen.enterprisejavacourse.financetracker.service.CategoryService;
 
+/**
+ * Представление для добавления категорий
+ */
 @Route("categories/add")
 @PermitAll
 public class AddCategoryView extends VerticalLayout {
@@ -16,6 +19,7 @@ public class AddCategoryView extends VerticalLayout {
     public AddCategoryView(CategoryService categoryService) {
         H1 header = new H1("Добавить категорию трат");
         add(header);
+        configureBackNavigation();
         TextField name = new TextField("Название");
         add(name);
         Button save = new Button("Сохранить", buttonClickEvent -> {
@@ -23,6 +27,12 @@ public class AddCategoryView extends VerticalLayout {
             UI.getCurrent().navigate(CategoriesView.class);
         });
         add(save);
+    }
+
+    private void configureBackNavigation() {
+        Button backButton = new Button(
+                "Назад", event -> getUI().ifPresent(ui -> ui.getPage().getHistory().back()));
+        add(backButton);
     }
 
 }

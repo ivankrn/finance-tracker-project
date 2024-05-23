@@ -1,12 +1,14 @@
 package ru.naumen.enterprisejavacourse.financetracker.view.auth;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import ru.naumen.enterprisejavacourse.financetracker.service.UserService;
 
@@ -15,6 +17,7 @@ import ru.naumen.enterprisejavacourse.financetracker.service.UserService;
  */
 @Route("register")
 @AnonymousAllowed
+@CssImport("./style/register-style.css")
 public class RegisterView extends VerticalLayout {
 
     public RegisterView(UserService userService) {
@@ -22,10 +25,16 @@ public class RegisterView extends VerticalLayout {
         setAlignItems(Alignment.CENTER);
         setJustifyContentMode(JustifyContentMode.CENTER);
 
-        TextField usernameField = new TextField("Логин");
-        PasswordField passwordField = new PasswordField("Пароль");
+        H1 welcomeMessage = new H1("Добро пожаловать на платформу SMARTMONEY!");
+        welcomeMessage.addClassName("welcome-message");
 
-        Button registerButton = new Button("Зарегистрироваться", event -> {
+        TextField usernameField = new TextField("Логин");
+        usernameField.addClassName("username-field");
+
+        PasswordField passwordField = new PasswordField("Пароль");
+        passwordField.addClassName("password-field");
+
+        Button registerButtonMain = new Button("Регистрация", event -> {
             String username = usernameField.getValue();
             String password = passwordField.getValue();
 
@@ -40,12 +49,18 @@ public class RegisterView extends VerticalLayout {
                 }
             }
         });
+        registerButtonMain.addClassName("register-button-main");
 
-        add(
-                new H1("Регистрация"),
-                usernameField,
-                passwordField,
-                registerButton
-        );
+        RouterLink loginLink = new RouterLink("Войти", LoginView.class);
+        loginLink.addClassName("login-link");
+
+        VerticalLayout registerLayout = new VerticalLayout(
+                welcomeMessage, usernameField, passwordField, registerButtonMain, loginLink);
+        registerLayout.setAlignItems(Alignment.CENTER);
+        registerLayout.addClassName("register-layout");
+
+        add(registerLayout);
+
+        addClassName("register-view");
     }
 }

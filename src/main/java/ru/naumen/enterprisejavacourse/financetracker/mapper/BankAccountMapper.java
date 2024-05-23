@@ -5,7 +5,7 @@ import ru.naumen.enterprisejavacourse.financetracker.database.model.BankAccount;
 import ru.naumen.enterprisejavacourse.financetracker.dto.BankAccountDto;
 
 /**
- * Маппер DTO для BankAccount
+ * Интерфейс маппера для конвертации сущности BankAccount в объект BankAccountDto
  */
 @Mapper(componentModel = "spring")
 public interface BankAccountMapper {

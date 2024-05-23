@@ -19,7 +19,32 @@
 		<com.vaadin.version>24.3.9</com.vaadin.version>
 		<org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
 		<lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
+		<com.storedobject.chart.version>3.2.6</com.storedobject.chart.version>
 	</properties>
+
+	<repositories>
+		<repository>
+			<id>Vaadin pre-release repository</id>
+			<url>http://maven.vaadin.com/vaadin-prereleases/</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>vaadin-addons</id>
+			<url>https://maven.vaadin.com/vaadin-addons</url>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>Vaadin pre-release repository</id>
+			<url>http://maven.vaadin.com/vaadin-prereleases/</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -84,6 +109,11 @@
 			<version>${lombok-mapstruct-binding.version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>com.storedobject.chart</groupId>
+			<artifactId>so-charts</artifactId>
+			<version>${com.storedobject.chart.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>
