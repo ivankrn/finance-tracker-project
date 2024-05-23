@@ -57,7 +57,16 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public void deleteTransactionById(long transactionId) {
-        transactionRepository.deleteById(transactionId);
+        Optional<Transaction> transactionOpt = transactionRepository.findById(transactionId);
+        if (transactionOpt.isPresent()) {
+            Transaction transaction = transactionOpt.get();
+            BankAccount bankAccount = transaction.getBankAccount();
+
+            bankAccount.subtractAmount(transaction.getAmount());
+            bankAccountRepository.save(bankAccount);
+
+            transactionRepository.delete(transaction);
+        }
     }
 
     @Override

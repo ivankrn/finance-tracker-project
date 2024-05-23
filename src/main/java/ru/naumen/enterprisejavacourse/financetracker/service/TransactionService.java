@@ -50,6 +50,12 @@ public interface TransactionService {
      */
     void deleteTransactionById(long transactionId);
 
+    /**
+     * Возвращает список всех транзакций для указанного банковского счета
+     *
+     * @param bankAccountId ID банковского счета
+     * @return список транзакций
+     */
     List<TransactionDto> findAllForBankAccountId(long bankAccountId);
 
     /**

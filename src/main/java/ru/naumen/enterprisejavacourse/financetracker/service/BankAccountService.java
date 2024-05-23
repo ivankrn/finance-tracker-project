@@ -34,8 +34,8 @@ public interface BankAccountService {
      * Проверяет, существует ли банковский счет у пользователя с заданным идентификатором
      *
      * @param bankAccountId идентификатор банковского счета
-     * @param id            идентификатор пользователя
+     * @param userId        идентификатор пользователя
      * @return true, если банковский счет существует для данного пользователя, иначе false
      */
-    boolean hasBankAccountWithId(Long bankAccountId, Long id);
+    boolean hasBankAccountWithId(Long bankAccountId, Long userId);
 }

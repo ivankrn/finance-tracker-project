@@ -47,8 +47,8 @@ public class BankAccountServiceImpl implements BankAccountService {
     }
 
     @Override
-    public boolean hasBankAccountWithId(Long bankAccountId, Long id) {
-        return repository.findByIdAndUserId(bankAccountId, id).isPresent();
+    public boolean hasBankAccountWithId(Long bankAccountId, Long userId) {
+        return repository.findByIdAndUserId(bankAccountId, userId).isPresent();
     }
 
 }
