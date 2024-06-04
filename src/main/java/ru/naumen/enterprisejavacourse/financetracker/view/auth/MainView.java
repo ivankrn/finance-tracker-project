@@ -4,14 +4,13 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.router.RouterLink;
 import jakarta.annotation.security.PermitAll;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import ru.naumen.enterprisejavacourse.financetracker.service.BankAccountService;
 import ru.naumen.enterprisejavacourse.financetracker.service.SecurityService;
 import ru.naumen.enterprisejavacourse.financetracker.view.bankaccount.BankAccountsView;
-import ru.naumen.enterprisejavacourse.financetracker.view.category.CategoriesView;
 
 /**
  * Главное представление
@@ -21,8 +20,10 @@ import ru.naumen.enterprisejavacourse.financetracker.view.category.CategoriesVie
 @PermitAll
 public class MainView extends VerticalLayout {
 
-    public MainView(SecurityService securityService) {
+    public MainView(SecurityService securityService, BankAccountService bankAccountService) {
         H1 logo = new H1("Финансовый дневник");
+        VerticalLayout logoLayout = new VerticalLayout(logo);
+        logoLayout.setAlignItems(Alignment.CENTER);
         logo.addClassName("logo");
         VerticalLayout header;
 
@@ -34,13 +35,11 @@ public class MainView extends VerticalLayout {
         }
 
         if (username != null && securityService.getAuthenticatedUser() != null) {
-            H1 welcomeMessage = new H1("Добро пожаловать, " + username);
-            header = new VerticalLayout(logo, welcomeMessage);
+            header = new VerticalLayout(logoLayout);
 
             Button logout = new Button("Выйти", click -> securityService.logout());
+            header.add(new BankAccountsView(securityService, bankAccountService));
             header.add(logout);
-            header.add(new RouterLink("Банковские счета", BankAccountsView.class));
-            header.add(new RouterLink("Категории трат", CategoriesView.class));
         } else {
             header = new VerticalLayout(logo);
         }

@@ -16,7 +16,6 @@ import ru.naumen.enterprisejavacourse.financetracker.service.BankAccountService;
 import ru.naumen.enterprisejavacourse.financetracker.service.SecurityService;
 import ru.naumen.enterprisejavacourse.financetracker.service.TransactionService;
 import ru.naumen.enterprisejavacourse.financetracker.view.bankaccount.BankAccountsView;
-import ru.naumen.enterprisejavacourse.financetracker.view.category.AddCategoryView;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -36,6 +35,7 @@ public class TransactionsView extends VerticalLayout implements BeforeEnterObser
     private final BankAccountService bankAccountService;
     private final SecurityService securityService;
     private Long bankAccountId;
+    private final RouterLink addTransactionLink = new RouterLink();
     private Grid<TransactionDto> grid;
     private DateTimePicker startDatePicker;
     private DateTimePicker endDatePicker;
@@ -74,9 +74,8 @@ public class TransactionsView extends VerticalLayout implements BeforeEnterObser
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
-                add(new RouterLink("Добавить транзакцию", AddTransactionView.class,
-                                new RouteParameters(new RouteParam("bankAccountId", bankAccountIdParam.get()))),
-                        new RouterLink("Создать категорию", AddCategoryView.class));
+                addTransactionLink.setRoute(AddTransactionView.class,
+                        new RouteParameters(new RouteParam("bankAccountId", bankAccountIdParam.get())));
             } else {
                 event.forwardTo(BankAccountsView.class);
                 Notification.show("Счет не найден или доступ запрещен");
@@ -89,6 +88,7 @@ public class TransactionsView extends VerticalLayout implements BeforeEnterObser
 
     private void configureFilter() {
         HorizontalLayout filterLayout = new HorizontalLayout();
+        filterLayout.setAlignItems(Alignment.END);
         startDatePicker = new DateTimePicker("Дата начала");
         endDatePicker = new DateTimePicker("Дата окончания");
 
@@ -104,6 +104,8 @@ public class TransactionsView extends VerticalLayout implements BeforeEnterObser
     }
 
     private void configureGrid() {
+        VerticalLayout gridLayout = new VerticalLayout();
+        gridLayout.setMargin(true);
         grid = new Grid<>(TransactionDto.class, false);
         grid.addColumn(transaction -> transaction.getCategory().getName()).setHeader("Категория транзакции");
         grid.addColumn(TransactionDto::getAmount).setHeader("Сумма транзакции");
@@ -118,15 +120,19 @@ public class TransactionsView extends VerticalLayout implements BeforeEnterObser
                     }
                 })
         );
-        add(grid);
+        addTransactionLink.setText("Добавить транзакцию");
+        gridLayout.add(grid, addTransactionLink);
+        add(gridLayout);
     }
 
     private void configureCharts() {
+        HorizontalLayout charts = new HorizontalLayout();
         expenseChart = new SOChart();
         expenseChart.setSize("800px", "500px");
         incomeChart = new SOChart();
         incomeChart.setSize("800px", "500px");
-        add(expenseChart, incomeChart);
+        charts.add(expenseChart, incomeChart);
+        add(charts);
     }
 
     private void updateView() throws Exception {
@@ -179,6 +185,7 @@ public class TransactionsView extends VerticalLayout implements BeforeEnterObser
         });
 
         PieChart pieChart = new PieChart(labels, chartData);
+        pieChart.setName(titleText);
         Title title = new Title(titleText);
 
         chart.removeAll();

@@ -3,6 +3,8 @@ package ru.naumen.enterprisejavacourse.financetracker.view.category;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
@@ -27,9 +29,9 @@ public class CategoriesView extends VerticalLayout {
         this.categoryService = categoryService;
         H1 header = new H1("Категории трат");
         add(header);
+        fillCategoriesList();
         add(new RouterLink("Добавить категорию", AddCategoryView.class));
         configureBackNavigation();
-        fillCategoriesList();
     }
 
     private void configureBackNavigation() {
@@ -42,9 +44,10 @@ public class CategoriesView extends VerticalLayout {
         List<CategoryDto> categories = categoryService.findAll();
         UnorderedList list = new UnorderedList();
         for (CategoryDto category : categories) {
-            Div div = new Div();
-            Paragraph name = new Paragraph(category.getName());
-            Button deleteButton = new Button("Удалить", e -> {
+            ListItem item = new ListItem();
+            Span name = new Span(category.getName());
+            Icon deleteButton = VaadinIcon.CLOSE_SMALL.create();
+            deleteButton.addClickListener(e -> {
                 try {
                     categoryService.delete(category.getId());
                     UI.getCurrent().getPage().reload();
@@ -52,8 +55,8 @@ public class CategoriesView extends VerticalLayout {
                     Notification.show(ex.getMessage());
                 }
             });
-            div.add(name, deleteButton);
-            list.add(div);
+            item.add(name, deleteButton);
+            list.add(item);
         }
         add(list);
     }
