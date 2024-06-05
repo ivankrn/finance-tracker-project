@@ -6,10 +6,7 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.router.Route;
-import com.vaadin.flow.router.RouteParam;
-import com.vaadin.flow.router.RouteParameters;
-import com.vaadin.flow.router.RouterLink;
+import com.vaadin.flow.router.*;
 import jakarta.annotation.security.PermitAll;
 import ru.naumen.enterprisejavacourse.financetracker.database.model.User;
 import ru.naumen.enterprisejavacourse.financetracker.dto.BankAccountDto;
@@ -37,13 +34,6 @@ public class BankAccountsView extends VerticalLayout {
         add(header);
         fillAccountsList();
         add(new RouterLink("Добавить счет", AddBankAccountView.class));
-        configureBackNavigation();
-    }
-
-    private void configureBackNavigation() {
-        Button backButton = new Button(
-                "Назад", event -> getUI().ifPresent(ui -> ui.getPage().getHistory().back()));
-        add(backButton);
     }
 
     private void fillAccountsList() {

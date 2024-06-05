@@ -19,7 +19,6 @@ public class AddCategoryView extends VerticalLayout {
     public AddCategoryView(CategoryService categoryService) {
         H1 header = new H1("Добавить категорию трат");
         add(header);
-        configureBackNavigation();
         TextField name = new TextField("Название");
         add(name);
         Button save = new Button("Сохранить", buttonClickEvent -> {
@@ -27,6 +26,7 @@ public class AddCategoryView extends VerticalLayout {
             UI.getCurrent().navigate(CategoriesView.class);
         });
         add(save);
+        configureBackNavigation();
     }
 
     private void configureBackNavigation() {
