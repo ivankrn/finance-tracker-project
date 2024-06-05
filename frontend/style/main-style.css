@@ -1,0 +1,30 @@
+.main-layout {
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    background-color: white;
+}
+
+.main-view {
+    padding: 150px 200px; 
+}
+
+.main-link {
+    background: #FAF8F4;
+    height: 80px;
+    display: inline-block;
+    width: 200px;
+    margin: 5%;
+    text-align: center;
+    padding-top: 50px;
+    border-radius: 10px;
+}
+
+.links-div {
+    width: 60%;
+}

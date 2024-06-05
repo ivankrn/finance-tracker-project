@@ -1,0 +1,17 @@
+.add-category-view {
+    padding: 100px 300px; 
+    height: 100%;
+}
+
+.add-category-layout {
+    align-items: center;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 400px;
+    position: relative;
+    z-index: 1;
+}

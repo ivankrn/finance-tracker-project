@@ -2,7 +2,9 @@ package ru.naumen.enterprisejavacourse.financetracker.view.bankaccount;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -10,6 +12,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteParam;
 import com.vaadin.flow.router.RouteParameters;
 import com.vaadin.flow.router.RouterLink;
+import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.security.PermitAll;
 import ru.naumen.enterprisejavacourse.financetracker.database.model.User;
 import ru.naumen.enterprisejavacourse.financetracker.dto.BankAccountDto;
@@ -25,6 +28,7 @@ import java.util.List;
  */
 @Route("bank-accounts")
 @PermitAll
+@CssImport("./style/bank-accounts-style.css")
 public class BankAccountsView extends VerticalLayout {
 
     private final SecurityService securityService;
@@ -33,20 +37,28 @@ public class BankAccountsView extends VerticalLayout {
     public BankAccountsView(SecurityService securityService, BankAccountService bankAccountService) {
         this.securityService = securityService;
         this.bankAccountService = bankAccountService;
+
+        addClassName("bank-account-view");
+        setWidth("auto");
+
+        VerticalLayout contentLayout = new VerticalLayout();
         H1 header = new H1("Счета пользователя");
-        add(header);
-        fillAccountsList();
-        add(new RouterLink("Добавить счет", AddBankAccountView.class));
-        configureBackNavigation();
+        contentLayout.add(header);
+
+        contentLayout.add(fillAccountsList());
+        contentLayout.addClassName("bank-account-layout");
+
+        contentLayout.add(new RouterLink("Добавить счет", AddBankAccountView.class));
+        contentLayout.add(configureBackNavigation());
+        add(contentLayout);
     }
 
-    private void configureBackNavigation() {
-        Button backButton = new Button(
+    private Button configureBackNavigation() {
+         return new Button(
                 "Назад", event -> getUI().ifPresent(ui -> ui.getPage().getHistory().back()));
-        add(backButton);
     }
 
-    private void fillAccountsList() {
+    private Grid<BankAccountDto> fillAccountsList() {
         User user = (User) securityService.getAuthenticatedUser();
         List<BankAccountDto> bankAccounts = bankAccountService.findAllForUserId(user.getId());
         Grid<BankAccountDto> grid = new Grid<>(BankAccountDto.class, false);
@@ -69,7 +81,7 @@ public class BankAccountsView extends VerticalLayout {
                 })
         );
         grid.setItems(bankAccounts);
-        add(grid);
+        return grid;
     }
 
 }
