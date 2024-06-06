@@ -1,0 +1,16 @@
+.transactions-view {
+    align-items: center;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    padding: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    margin: 20px 20px;
+}
+
+.expense-chart {
+    padding-left: 175px;
+}

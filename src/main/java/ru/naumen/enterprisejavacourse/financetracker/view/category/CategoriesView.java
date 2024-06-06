@@ -2,6 +2,7 @@ package ru.naumen.enterprisejavacourse.financetracker.view.category;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -21,28 +22,37 @@ import java.util.List;
  */
 @Route("categories")
 @PermitAll
+@CssImport("./style/categories-style.css")
 public class CategoriesView extends VerticalLayout {
 
     private final CategoryService categoryService;
 
     public CategoriesView(CategoryService categoryService) {
         this.categoryService = categoryService;
+
+        setClassName("categories-view");
+
+        VerticalLayout contentLayout = new VerticalLayout();
+        contentLayout.addClassName("categories-layout");
+
         H1 header = new H1("Категории трат");
-        add(header);
-        fillCategoriesList();
-        add(new RouterLink("Добавить категорию", AddCategoryView.class));
-        configureBackNavigation();
+        contentLayout.add(header);
+        contentLayout.add(new RouterLink("Добавить категорию", AddCategoryView.class));
+
+        contentLayout.add(configureBackNavigation());
+        contentLayout.add(fillCategoriesList());
+        add(contentLayout);
     }
 
-    private void configureBackNavigation() {
-        Button backButton = new Button(
+    private Button configureBackNavigation() {
+         return new Button(
                 "Назад", event -> getUI().ifPresent(ui -> ui.getPage().getHistory().back()));
-        add(backButton);
     }
 
-    private void fillCategoriesList() {
+    private UnorderedList fillCategoriesList() {
         List<CategoryDto> categories = categoryService.findAll();
         UnorderedList list = new UnorderedList();
+        list.setClassName("categories-list");
         for (CategoryDto category : categories) {
             ListItem item = new ListItem();
             Span name = new Span(category.getName());
@@ -58,7 +68,7 @@ public class CategoriesView extends VerticalLayout {
             item.add(name, deleteButton);
             list.add(item);
         }
-        add(list);
+        return list;
     }
 
 }

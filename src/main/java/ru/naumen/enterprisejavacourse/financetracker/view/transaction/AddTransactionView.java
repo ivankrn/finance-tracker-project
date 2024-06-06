@@ -4,6 +4,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
@@ -30,6 +31,7 @@ import java.util.Optional;
  */
 @Route("bank-accounts/:bankAccountId?/transactions/add")
 @PermitAll
+@CssImport("./style/add-transaction-style.css")
 public class AddTransactionView extends VerticalLayout implements BeforeEnterObserver {
 
     private final CategoryService categoryService;
@@ -40,8 +42,11 @@ public class AddTransactionView extends VerticalLayout implements BeforeEnterObs
                               CategoryService categoryService) {
         this.transactionService = transactionService;
         this.categoryService = categoryService;
+        setClassName("add-transaction-view");
         H1 header = new H1("Добавить транзакцию");
         add(header);
+        setWidth("auto");
+
     }
 
     private void configureBackNavigation() {

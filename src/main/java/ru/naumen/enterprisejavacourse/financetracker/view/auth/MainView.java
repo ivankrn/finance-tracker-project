@@ -23,9 +23,9 @@ public class MainView extends VerticalLayout {
     public MainView(SecurityService securityService, BankAccountService bankAccountService) {
         H1 logo = new H1("Финансовый дневник");
         VerticalLayout logoLayout = new VerticalLayout(logo);
-        logoLayout.setAlignItems(Alignment.CENTER);
         logo.addClassName("logo");
         VerticalLayout header;
+        setSizeFull();
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = null;
@@ -45,5 +45,6 @@ public class MainView extends VerticalLayout {
         }
 
         add(header);
+
     }
 }

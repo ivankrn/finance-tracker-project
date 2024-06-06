@@ -3,6 +3,7 @@ package ru.naumen.enterprisejavacourse.financetracker.view.transaction;
 import com.storedobject.chart.*;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datetimepicker.DateTimePicker;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.notification.Notification;
@@ -29,6 +30,7 @@ import java.util.stream.Collectors;
  */
 @Route("bank-accounts/:bankAccountId/transactions")
 @PermitAll
+@CssImport("./style/transactions-style.css")
 public class TransactionsView extends VerticalLayout implements BeforeEnterObserver {
 
     private final TransactionService transactionService;
@@ -51,6 +53,8 @@ public class TransactionsView extends VerticalLayout implements BeforeEnterObser
 
         H1 header = new H1("Транзакции на счету");
         add(header);
+        setClassName("transactions-view");
+        setWidth("auto");
         configureFilter();
         configureGrid();
         configureCharts();
@@ -129,6 +133,7 @@ public class TransactionsView extends VerticalLayout implements BeforeEnterObser
         HorizontalLayout charts = new HorizontalLayout();
         expenseChart = new SOChart();
         expenseChart.setSize("800px", "500px");
+        expenseChart.setClassName("expense-chart");
         incomeChart = new SOChart();
         incomeChart.setSize("800px", "500px");
         charts.add(expenseChart, incomeChart);

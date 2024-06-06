@@ -1,0 +1,11 @@
+.main-layout {
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    background-color: white;
+}

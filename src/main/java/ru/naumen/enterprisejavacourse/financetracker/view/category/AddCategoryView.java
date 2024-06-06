@@ -2,6 +2,7 @@ package ru.naumen.enterprisejavacourse.financetracker.view.category;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -14,25 +15,33 @@ import ru.naumen.enterprisejavacourse.financetracker.service.CategoryService;
  */
 @Route("categories/add")
 @PermitAll
+@CssImport("./style/add-category-style.css")
 public class AddCategoryView extends VerticalLayout {
 
     public AddCategoryView(CategoryService categoryService) {
+        addClassName("add-category-view");
+        setWidth("auto");
+
+        VerticalLayout contentLayout = new VerticalLayout();
+        contentLayout.addClassName("add-category-layout");
+
         H1 header = new H1("Добавить категорию трат");
-        add(header);
+        contentLayout.add(header);
+
         TextField name = new TextField("Название");
-        add(name);
+        contentLayout.add(name);
         Button save = new Button("Сохранить", buttonClickEvent -> {
             categoryService.create(name.getValue());
             UI.getCurrent().navigate(CategoriesView.class);
         });
-        add(save);
-        configureBackNavigation();
+        contentLayout.add(save);
+        contentLayout.add(configureBackNavigation());
+        add(contentLayout);
     }
 
-    private void configureBackNavigation() {
-        Button backButton = new Button(
+    private Button configureBackNavigation() {
+        return new Button(
                 "Назад", event -> getUI().ifPresent(ui -> ui.getPage().getHistory().back()));
-        add(backButton);
     }
 
 }
