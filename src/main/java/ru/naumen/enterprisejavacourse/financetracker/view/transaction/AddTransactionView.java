@@ -13,11 +13,13 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouterLink;
 import jakarta.annotation.security.PermitAll;
 import ru.naumen.enterprisejavacourse.financetracker.dto.CategoryDto;
 import ru.naumen.enterprisejavacourse.financetracker.service.CategoryService;
 import ru.naumen.enterprisejavacourse.financetracker.service.TransactionService;
 import ru.naumen.enterprisejavacourse.financetracker.view.bankaccount.BankAccountsView;
+import ru.naumen.enterprisejavacourse.financetracker.view.category.CategoriesView;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -59,6 +61,7 @@ public class AddTransactionView extends VerticalLayout implements BeforeEnterObs
         bankAccountIdParam.ifPresent(param -> {
             this.bankAccountId = Long.valueOf(param);
             addForm();
+            configureBackNavigation();
         });
     }
 
@@ -68,11 +71,12 @@ public class AddTransactionView extends VerticalLayout implements BeforeEnterObs
         typeRadioButtonGroup.setLabel("Тип транзакции");
         typeRadioButtonGroup.setItems("Пополнение", "Трата");
         ComboBox<CategoryDto> categoryComboBox = new ComboBox<>("Категория");
+        add(typeRadioButtonGroup, categoryComboBox, new RouterLink("Категории трат", CategoriesView.class));
         categoryComboBox.setItems(categoryService.findAll());
         categoryComboBox.setItemLabelGenerator(CategoryDto::getName);
         TextField amountField = new TextField("Сумма");
         DatePicker datePicker = new DatePicker("Дата совершения транзакции");
-        add(typeRadioButtonGroup, categoryComboBox, amountField, datePicker);
+        add(amountField, datePicker);
         Button saveButton = new Button("Сохранить", buttonClickEvent -> {
             long categoryId = categoryComboBox.getValue().getId();
             BigDecimal amount = new BigDecimal(amountField.getValue());
@@ -85,7 +89,6 @@ public class AddTransactionView extends VerticalLayout implements BeforeEnterObs
             UI.getCurrent().navigate(BankAccountsView.class);
         });
         add(saveButton);
-        configureBackNavigation();
     }
 
 }
