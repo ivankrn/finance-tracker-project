@@ -133,6 +133,7 @@ public class TransactionsView extends VerticalLayout implements BeforeEnterObser
         HorizontalLayout charts = new HorizontalLayout();
         expenseChart = new SOChart();
         expenseChart.setSize("800px", "500px");
+        expenseChart.setClassName("expense-chart");
         incomeChart = new SOChart();
         incomeChart.setSize("800px", "500px");
         charts.add(expenseChart, incomeChart);

@@ -4,7 +4,6 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -34,9 +33,6 @@ public class BankAccountsView extends VerticalLayout {
         this.securityService = securityService;
         this.bankAccountService = bankAccountService;
 
-        addClassName("bank-account-view");
-        setWidth("auto");
-
         VerticalLayout contentLayout = new VerticalLayout();
         H1 header = new H1("Счета пользователя");
         contentLayout.add(header);
@@ -45,13 +41,7 @@ public class BankAccountsView extends VerticalLayout {
         contentLayout.addClassName("bank-account-layout");
 
         contentLayout.add(new RouterLink("Добавить счет", AddBankAccountView.class));
-        contentLayout.add(configureBackNavigation());
         add(contentLayout);
-    }
-
-    private Button configureBackNavigation() {
-         return new Button(
-                "Назад", event -> getUI().ifPresent(ui -> ui.getPage().getHistory().back()));
     }
 
     private Grid<BankAccountDto> fillAccountsList() {

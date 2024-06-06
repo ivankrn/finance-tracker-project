@@ -1,8 +1,6 @@
 package ru.naumen.enterprisejavacourse.financetracker.view.auth;
 
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.dependency.CssImport;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
@@ -20,7 +18,6 @@ import ru.naumen.enterprisejavacourse.financetracker.view.bankaccount.BankAccoun
  */
 @Route("")
 @PermitAll
-@CssImport("./style/main-style.css")
 public class MainView extends VerticalLayout {
 
     public MainView(SecurityService securityService, BankAccountService bankAccountService) {
@@ -29,7 +26,6 @@ public class MainView extends VerticalLayout {
         logo.addClassName("logo");
         VerticalLayout header;
         setSizeFull();
-        addClassName("main-view");
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = null;
