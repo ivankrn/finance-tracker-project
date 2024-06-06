@@ -23,4 +23,8 @@ public class BankAccountDto {
     @NotNull(message = "Поле \"Сумма счета\" не может быть пустым")
     @DecimalMin(value = "0.0", message = "Сумма счета не может быть отрицательной")
     BigDecimal amount;
+
+    @NotBlank(message = "Поле \"Валюта банковского счета\" не может быть пустым")
+    String currency;
+
 }

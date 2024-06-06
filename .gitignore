@@ -34,4 +34,6 @@ build/
 ### VS Code ###
 .vscode/
 /src/main/bundles/
+/node_modules/
 /frontend/
+!/frontend/style/

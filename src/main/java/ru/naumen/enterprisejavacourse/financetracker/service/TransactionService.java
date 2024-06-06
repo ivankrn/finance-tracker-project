@@ -1,7 +1,5 @@
 package ru.naumen.enterprisejavacourse.financetracker.service;
 
-import ru.naumen.enterprisejavacourse.financetracker.database.model.BankAccount;
-import ru.naumen.enterprisejavacourse.financetracker.database.model.Category;
 import ru.naumen.enterprisejavacourse.financetracker.dto.TransactionDto;
 import ru.naumen.enterprisejavacourse.financetracker.exception.TransactionNotFoundException;
 
@@ -17,43 +15,58 @@ public interface TransactionService {
     /**
      * Пополняет счет указанной суммой
      *
-     * @param category    категория транзакции
-     * @param bankAccount счет
-     * @param amount      сумма пополнения
+     * @param bankAccountId ID счета
+     * @param categoryId    ID категории транзакции
+     * @param amount        сумма пополнения
+     * @param date          дата совершения транзакции
      */
-    void accrual(Category category, BankAccount bankAccount, BigDecimal amount);
+    void accrual(long bankAccountId, long categoryId, BigDecimal amount, LocalDateTime date);
 
     /**
      * Снимает указанную сумму со счета
      *
-     * @param category    категория транзакции
-     * @param bankAccount счет
-     * @param amount      сумма снятия
+     * @param bankAccountId ID счета
+     * @param categoryId    ID категории транзакции
+     * @param amount        сумма снятия
+     * @param date          дата совершения транзакции
      */
-    void withdraw(Category category, BankAccount bankAccount, BigDecimal amount);
+    void withdraw(long bankAccountId, long categoryId, BigDecimal amount, LocalDateTime date);
 
     /**
      * Редактирует сумму транзакции с указанным ID
      *
      * @param transactionId ID транзакции
+     * @param newCategoryId ID новой категории
      * @param newAmount     новая сумма транзакции
+     * @param newDate       новая дата совершения транзакции
      * @throws TransactionNotFoundException если транзакция не найдена
      */
-    void editTransaction(Long transactionId, BigDecimal newAmount, Category category);
+    void editTransaction(long transactionId, long newCategoryId, BigDecimal newAmount, LocalDateTime newDate);
 
     /**
      * Удаляет транзакцию с указанным ID.
      *
      * @param transactionId ID транзакции
      */
-    void deleteTransaction(Long transactionId);
+    void deleteTransactionById(long transactionId);
+
+    /**
+     * Возвращает список всех транзакций для указанного банковского счета
+     *
+     * @param bankAccountId ID банковского счета
+     * @return список транзакций
+     */
+    List<TransactionDto> findAllForBankAccountId(long bankAccountId);
 
     /**
      * Фильтрует транзакции по дате и сортирует их по сумме
      *
-     * @param startDate начальная дата
-     * @param endDate   конечная дата
+     * @param bankAccountId ID счета
+     * @param startDate     начальная дата
+     * @param endDate       конечная дата
      * @return список отфильтрованных и отсортированных транзакций
      */
-    List<TransactionDto> findBetweenDatesAndSortByAmount(LocalDateTime startDate, LocalDateTime endDate);
+    List<TransactionDto> findBetweenDatesAndSortByAmount(long bankAccountId,
+                                                         LocalDateTime startDate,
+                                                         LocalDateTime endDate);
 }

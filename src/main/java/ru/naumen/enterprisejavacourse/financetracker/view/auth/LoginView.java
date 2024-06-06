@@ -1,57 +1,43 @@
 package ru.naumen.enterprisejavacourse.financetracker.view.auth;
 
-import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.PasswordField;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
  * Представление для входа в систему
  */
 @Route("login")
 @AnonymousAllowed
+@CssImport("./style/login-style.css")
 public class LoginView extends VerticalLayout {
 
-    private static final String MAIN_PAGE_URL = "";
-
-    public LoginView(AuthenticationManager authenticationManager) {
+    public LoginView() {
         setSizeFull();
         setAlignItems(Alignment.CENTER);
         setJustifyContentMode(JustifyContentMode.CENTER);
 
-        TextField usernameField = new TextField("Логин");
-        PasswordField passwordField = new PasswordField("Пароль");
+        H1 welcomeMessage = new H1("Добро пожаловать на платформу SMARTMONEY!");
+        welcomeMessage.addClassName("welcome-message");
 
-        Button loginButton = new Button("Войти", event -> {
-            try {
-                Authentication authentication = authenticationManager.authenticate(
-                        new UsernamePasswordAuthenticationToken(usernameField.getValue(), passwordField.getValue())
-                );
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-                UI.getCurrent().navigate(MAIN_PAGE_URL);
-            } catch (AuthenticationException e) {
-                Notification.show(
-                        "Ошибка входа: " + e.getMessage(),
-                        3000,
-                        Notification.Position.TOP_CENTER);
-            }
-        });
+        LoginForm login = new LoginForm();
+        login.setAction("login");
+        login.setForgotPasswordButtonVisible(false);
+        login.addClassName("login-form");
 
-        add(
-                new H1("Финансовый дневник"),
-                usernameField,
-                passwordField,
-                loginButton
-        );
+        RouterLink registerLink = new RouterLink("Зарегистрироваться", RegisterView.class);
+        registerLink.addClassName("register-link");
+
+        VerticalLayout loginLayout = new VerticalLayout(welcomeMessage, login, registerLink);
+        loginLayout.setAlignItems(Alignment.CENTER);
+        loginLayout.addClassName("login-layout");
+
+        add(loginLayout);
+
+        addClassName("login-view");
     }
 }

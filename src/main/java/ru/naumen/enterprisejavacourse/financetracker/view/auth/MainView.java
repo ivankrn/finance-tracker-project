@@ -2,14 +2,15 @@ package ru.naumen.enterprisejavacourse.financetracker.view.auth;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.PermitAll;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import ru.naumen.enterprisejavacourse.financetracker.service.BankAccountService;
 import ru.naumen.enterprisejavacourse.financetracker.service.SecurityService;
+import ru.naumen.enterprisejavacourse.financetracker.view.bankaccount.BankAccountsView;
 
 /**
  * Главное представление
@@ -19,11 +20,12 @@ import ru.naumen.enterprisejavacourse.financetracker.service.SecurityService;
 @PermitAll
 public class MainView extends VerticalLayout {
 
-    public MainView(SecurityService securityService) {
+    public MainView(SecurityService securityService, BankAccountService bankAccountService) {
         H1 logo = new H1("Финансовый дневник");
+        VerticalLayout logoLayout = new VerticalLayout(logo);
         logo.addClassName("logo");
-
-        HorizontalLayout header;
+        VerticalLayout header;
+        setSizeFull();
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = null;
@@ -33,15 +35,16 @@ public class MainView extends VerticalLayout {
         }
 
         if (username != null && securityService.getAuthenticatedUser() != null) {
-            H1 welcomeMessage = new H1("Добро пожаловать, " + username);
-            header = new HorizontalLayout(welcomeMessage, logo);
+            header = new VerticalLayout(logoLayout);
 
             Button logout = new Button("Выйти", click -> securityService.logout());
+            header.add(new BankAccountsView(securityService, bankAccountService));
             header.add(logout);
         } else {
-            header = new HorizontalLayout(logo);
+            header = new VerticalLayout(logo);
         }
 
         add(header);
+
     }
 }

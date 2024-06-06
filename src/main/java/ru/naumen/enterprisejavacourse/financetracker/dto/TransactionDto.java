@@ -19,8 +19,8 @@ public class TransactionDto {
     @EqualsAndHashCode.Include
     long id;
 
-    @NotNull(message = "Поле \"ID категории\" не может быть пустым")
-    Long categoryId;
+    @NotNull(message = "Поле \"Категория\" не может быть пустым")
+    CategoryDto category;
 
     @NotNull(message = "Поле \"ID банковского счета\" не может быть пустым")
     Long bankAccountId;
@@ -30,5 +30,5 @@ public class TransactionDto {
     BigDecimal amount;
 
     @NotNull(message = "Поле \"Дата\" не может быть пустым")
-    LocalDateTime createdAt;
+    LocalDateTime date;
 }
